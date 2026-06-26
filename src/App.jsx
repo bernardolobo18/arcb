@@ -1,4 +1,3 @@
-import { LogOut, RefreshCw } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { AdminPanel } from './components/AdminPanel.jsx';
 import { NumericKeypad } from './components/NumericKeypad.jsx';
@@ -227,21 +226,17 @@ export function App() {
     setPinToken(null);
   }
 
-  const syncLabel = syncStatus === 'pending' ? 'Offline: sincronizacao pendente' : 'Cloud sincronizada';
-
   return (
     <div className="app-shell">
         {cloudError ? <div className="storage-warning">{cloudError}</div> : null}
         <header className="topbar">
           <div>
             <h1>{state.settings.businessName}</h1>
-            <p className={`sync-state ${syncStatus}`}><RefreshCw size={14} />{syncLabel}</p>
           </div>
           <nav className="tabs" aria-label="Navegacao principal">
             <button className={activeTab === 'pos' ? 'active' : ''} onClick={() => setActiveTab('pos')}>Caixa</button>
             <button className={activeTab === 'admin' ? 'active' : ''} onClick={() => setActiveTab('admin')}>Admin</button>
             {activeSession ? <button className="close-shop-button" onClick={startCloseShop}>Fechar loja</button> : null}
-            <button title="Sair" onClick={signOut}><LogOut size={18} /></button>
           </nav>
         </header>
 
@@ -250,13 +245,10 @@ export function App() {
             categories={state.categories}
             products={state.products}
             cart={cart}
-            subtotal={subtotal}
-            discountAmount={discountAmount}
             total={total}
             onAdd={addToCart}
             onQuantity={changeQuantity}
             onRemove={removeItem}
-            onDiscountChange={setDiscountAmount}
             onFinalize={finalizeOrder}
           />
         ) : (

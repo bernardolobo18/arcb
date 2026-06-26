@@ -6,13 +6,10 @@ export function PosScreen({
   categories,
   products,
   cart,
-  subtotal,
-  discountAmount,
   total,
   onAdd,
   onQuantity,
   onRemove,
-  onDiscountChange,
   onFinalize
 }) {
   const [categoryId, setCategoryId] = useState(categories[0]?.id ?? '');
@@ -91,17 +88,6 @@ export function PosScreen({
         </div>
 
         <div className="cart-footer">
-          <div className="cart-totals">
-            <div><span>Subtotal</span><strong>{formatCurrency(subtotal)}</strong></div>
-            <label>Desconto
-              <input
-                inputMode="decimal"
-                placeholder="0,00"
-                value={discountAmount}
-                onChange={(event) => onDiscountChange(event.target.value)}
-              />
-            </label>
-          </div>
           <button className="primary-action" disabled={!cart.length} onClick={onFinalize}>
             Finalizar pedido
           </button>
