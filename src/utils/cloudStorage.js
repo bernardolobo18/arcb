@@ -1,3 +1,4 @@
+import { CATALOG_VERSION, DEFAULT_CATEGORIES, DEFAULT_PRODUCTS } from '../data/defaultData.js';
 import { DEFAULT_STATE } from './storage.js';
 import { supabase } from './supabase.js';
 
@@ -6,7 +7,7 @@ const PENDING_KEY = 'cafe-pos-cloud-pending-state';
 
 function normalizeState(value = {}) {
   const settings = value.settings || {};
-  return {
+  return mergeCatalogDefaults({
     categories: Array.isArray(value.categories) ? value.categories : DEFAULT_STATE.categories,
     products: Array.isArray(value.products) ? value.products : DEFAULT_STATE.products,
     orders: Array.isArray(value.orders) ? value.orders : [],
@@ -14,8 +15,33 @@ function normalizeState(value = {}) {
     expenses: Array.isArray(value.expenses) ? value.expenses : [],
     settings: {
       ...DEFAULT_STATE.settings,
-      ...settings
+      ...settings,
+      catalogVersion: Object.prototype.hasOwnProperty.call(settings, 'catalogVersion') ? settings.catalogVersion : 0
     }
+  });
+}
+
+function mergeCatalogDefaults(state) {
+  const categories = [
+    ...DEFAULT_CATEGORIES.map((defaultCategory) => {
+      const existing = state.categories.find((category) => category.id === defaultCategory.id);
+      return existing ? { ...existing, name: defaultCategory.name } : defaultCategory;
+    }),
+    ...state.categories.filter((category) => !DEFAULT_CATEGORIES.some((defaultCategory) => defaultCategory.id === category.id))
+  ];
+  const products = [
+    ...DEFAULT_PRODUCTS.map((defaultProduct) => {
+      const existing = state.products.find((product) => product.id === defaultProduct.id);
+      return existing ? { ...existing, ...defaultProduct } : defaultProduct;
+    }),
+    ...state.products.filter((product) => !DEFAULT_PRODUCTS.some((defaultProduct) => defaultProduct.id === product.id))
+  ];
+
+  return {
+    ...state,
+    categories,
+    products,
+    settings: { ...state.settings, catalogVersion: CATALOG_VERSION }
   };
 }
 

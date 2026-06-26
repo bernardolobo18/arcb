@@ -1,4 +1,4 @@
-export const CATALOG_VERSION = 4;
+export const CATALOG_VERSION = 5;
 
 export const DEFAULT_CATEGORIES = [
   { id: 'cafes', name: 'Cafes' },
@@ -15,6 +15,7 @@ export const DEFAULT_PRODUCTS = [
   { id: 'descafeinado', name: 'Descafeinado', categoryId: 'cafes', price: 0.8 },
   { id: 'garoto', name: 'Garoto', categoryId: 'cafes', price: 0.8 },
   { id: 'galao', name: 'Galao', categoryId: 'cafes', price: 1 },
+  { id: 'cha', name: 'Cha', categoryId: 'cafes', price: 1 },
   { id: 'meia-leite', name: 'Meia de leite', categoryId: 'cafes', price: 0.9 },
   { id: 'copo-leite', name: 'Copo de leite', categoryId: 'cafes', price: 0.9 },
   { id: 'carioca-limao', name: 'Carioca de limao', categoryId: 'cafes', price: 0.8 },
