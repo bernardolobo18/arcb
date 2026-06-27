@@ -1,4 +1,5 @@
 import { CATALOG_VERSION, DEFAULT_CATEGORIES, DEFAULT_PRODUCTS } from '../data/defaultData.js';
+import { isLocalPinSession } from './pinSession.js';
 import { DEFAULT_STATE } from './storage.js';
 import { supabase } from './supabase.js';
 
@@ -80,6 +81,8 @@ export function hasPendingState() {
 }
 
 export async function loadCloudState(token) {
+  if (isLocalPinSession(token)) return getCachedState();
+
   const pending = readJson(PENDING_KEY);
   if (pending) return normalizeState(pending);
 
@@ -93,6 +96,8 @@ export async function saveCloudState(token, state) {
   const normalized = normalizeState(state);
   writeJson(CACHE_KEY, normalized);
 
+  if (isLocalPinSession(token)) return { queued: false };
+
   if (!navigator.onLine) {
     writeJson(PENDING_KEY, normalized);
     return { queued: true };
@@ -104,6 +109,8 @@ export async function saveCloudState(token, state) {
 }
 
 export async function flushPendingState(token) {
+  if (isLocalPinSession(token)) return false;
+
   const pending = readJson(PENDING_KEY);
   if (!pending || !navigator.onLine) return false;
 
