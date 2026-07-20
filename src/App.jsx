@@ -215,14 +215,14 @@ export function App() {
     setLastOrder(null);
     setIsCloseOpen(false);
     setCart([]);
-    window.setTimeout(() => window.print(), 100);
+    scheduleSinglePagePrint('.close-report');
   }
 
   function printReceipt(order = lastOrder) {
     if (!order) return;
     setCloseReport(null);
     setLastOrder(order);
-    window.setTimeout(() => window.print(), 80);
+    scheduleSinglePagePrint('.print-receipt:not(.close-report)');
   }
 
   function signOut() {
@@ -375,4 +375,27 @@ function CloseReport({ report, businessName }) {
       <p>Relatorio guardado na cloud</p>
     </section>
   );
+}
+
+function scheduleSinglePagePrint(selector) {
+  window.setTimeout(() => {
+    const receipt = document.querySelector(selector);
+    if (!receipt) return;
+
+    receipt.classList.add('print-measurement');
+    const heightInMillimetres = Math.max(
+      40,
+      Math.ceil(receipt.getBoundingClientRect().height * 25.4 / 96) + 2
+    );
+    receipt.classList.remove('print-measurement');
+
+    document.getElementById('receipt-page-size')?.remove();
+    const pageStyle = document.createElement('style');
+    pageStyle.id = 'receipt-page-size';
+    pageStyle.textContent = `@page { size: 80mm ${heightInMillimetres}mm; margin: 0; }`;
+    document.head.appendChild(pageStyle);
+
+    window.addEventListener('afterprint', () => pageStyle.remove(), { once: true });
+    window.print();
+  }, 100);
 }
