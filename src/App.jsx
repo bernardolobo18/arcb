@@ -423,8 +423,8 @@ function scheduleSinglePagePrint(selector) {
 
     window.requestAnimationFrame(() => {
       const heightInMillimetres = Math.max(
-        25,
-        Math.ceil(receiptCopy.getBoundingClientRect().height * 25.4 / 96) + 2
+        90,
+        Math.ceil(receiptCopy.getBoundingClientRect().height * 25.4 / 96) + 6
       );
       const pageStyle = printDocument.createElement('style');
       pageStyle.textContent = `@page { size: 72mm ${heightInMillimetres}mm; margin: 0; }`;
