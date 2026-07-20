@@ -410,13 +410,13 @@ function scheduleSinglePagePrint(selector) {
       }
       .print-receipt {
         color: #000; display: block; font-family: "Courier New", monospace;
-        font-size: 14px; line-height: 1.25; padding: 2mm; width: 72mm;
+        font-size: 12px; padding: 2mm; width: 72mm;
       }
       h2, p { margin: 0 0 6px; text-align: center; }
       hr { border: 0; border-top: 1px dashed #000; margin: 8px 0; }
       .receipt-row { display: flex; gap: 8px; justify-content: space-between; margin: 5px 0; }
       .receipt-row span:last-child { flex-shrink: 0; }
-      .receipt-row.total { font-size: 16px; font-weight: 700; }
+      .receipt-row.total { font-size: 14px; font-weight: 700; }
       .thanks { margin-top: 12px; }
     `;
     printDocument.head.appendChild(receiptStyles);
