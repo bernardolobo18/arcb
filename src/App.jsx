@@ -215,14 +215,14 @@ export function App() {
     setLastOrder(null);
     setIsCloseOpen(false);
     setCart([]);
-    scheduleSinglePagePrint('.close-report');
+    window.setTimeout(() => window.print(), 100);
   }
 
   function printReceipt(order = lastOrder) {
     if (!order) return;
     setCloseReport(null);
     setLastOrder(order);
-    scheduleSinglePagePrint('.print-receipt:not(.close-report)');
+    window.setTimeout(() => window.print(), 80);
   }
 
   function signOut() {
@@ -375,65 +375,4 @@ function CloseReport({ report, businessName }) {
       <p>Relatorio guardado na cloud</p>
     </section>
   );
-}
-
-function scheduleSinglePagePrint(selector) {
-  window.setTimeout(() => {
-    const receipt = document.querySelector(selector);
-    if (!receipt) return;
-
-    const printFrame = document.createElement('iframe');
-    printFrame.title = 'Impressão do talão';
-    printFrame.style.cssText = 'border:0;height:0;position:fixed;right:0;bottom:0;width:0;';
-    document.body.appendChild(printFrame);
-
-    const printDocument = printFrame.contentDocument;
-    printDocument.open();
-    printDocument.write(`<!doctype html>
-      <html lang="pt-PT">
-        <head><meta charset="UTF-8"><title></title></head>
-        <body>${receipt.outerHTML}</body>
-      </html>`);
-    printDocument.close();
-
-    const receiptCopy = printDocument.querySelector('.print-receipt');
-    receiptCopy.classList.remove('print-measurement');
-    receiptCopy.style.display = 'block';
-
-    const receiptStyles = printDocument.createElement('style');
-    receiptStyles.textContent = `
-      * { box-sizing: border-box; }
-      @page { margin: 0 !important; }
-      html, body {
-        background: #fff; height: auto; margin: 0 !important; padding: 0 !important;
-        overflow: hidden; width: 72mm;
-      }
-      .print-receipt {
-        color: #000; display: block; font-family: "Courier New", monospace;
-        font-size: 12px; padding: 2mm; width: 72mm;
-      }
-      h2, p { margin: 0 0 6px; text-align: center; }
-      hr { border: 0; border-top: 1px dashed #000; margin: 8px 0; }
-      .receipt-row { display: flex; gap: 8px; justify-content: space-between; margin: 5px 0; }
-      .receipt-row span:last-child { flex-shrink: 0; }
-      .receipt-row.total { font-size: 14px; font-weight: 700; }
-      .thanks { margin-top: 12px; }
-    `;
-    printDocument.head.appendChild(receiptStyles);
-
-    window.requestAnimationFrame(() => {
-      const heightInMillimetres = Math.max(
-        90,
-        Math.ceil(receiptCopy.getBoundingClientRect().height * 25.4 / 96) + 6
-      );
-      const pageStyle = printDocument.createElement('style');
-      pageStyle.textContent = `@page { size: 72mm ${heightInMillimetres}mm; margin: 0; }`;
-      printDocument.head.appendChild(pageStyle);
-
-      const removeFrame = () => window.setTimeout(() => printFrame.remove(), 500);
-      printFrame.contentWindow.addEventListener('afterprint', removeFrame, { once: true });
-      printFrame.contentWindow.focus();
-      printFrame.contentWindow.print();
-    });
-  }, 100);
 }
