@@ -340,7 +340,7 @@ export function App() {
           </div>
         ) : null}
 
-        <Receipt order={lastOrder} businessName={state.settings.businessName} />
+        <Receipt order={lastOrder} />
         <CloseReport report={closeReport} businessName={state.settings.businessName} />
       </div>
   );
@@ -391,7 +391,7 @@ function scheduleSinglePagePrint(selector) {
     printDocument.open();
     printDocument.write(`<!doctype html>
       <html lang="pt-PT">
-        <head><meta charset="UTF-8"><title>Talão</title></head>
+        <head><meta charset="UTF-8"><title></title></head>
         <body>${receipt.outerHTML}</body>
       </html>`);
     printDocument.close();
@@ -403,16 +403,20 @@ function scheduleSinglePagePrint(selector) {
     const receiptStyles = printDocument.createElement('style');
     receiptStyles.textContent = `
       * { box-sizing: border-box; }
-      html, body { background: #fff; margin: 0; padding: 0; width: 72mm; }
+      @page { margin: 0 !important; }
+      html, body {
+        background: #fff; height: auto; margin: 0 !important; padding: 0 !important;
+        overflow: hidden; width: 72mm;
+      }
       .print-receipt {
         color: #000; display: block; font-family: "Courier New", monospace;
-        font-size: 12px; padding: 2mm; width: 72mm;
+        font-size: 14px; line-height: 1.25; padding: 2mm; width: 72mm;
       }
       h2, p { margin: 0 0 6px; text-align: center; }
       hr { border: 0; border-top: 1px dashed #000; margin: 8px 0; }
       .receipt-row { display: flex; gap: 8px; justify-content: space-between; margin: 5px 0; }
       .receipt-row span:last-child { flex-shrink: 0; }
-      .receipt-row.total { font-size: 14px; font-weight: 700; }
+      .receipt-row.total { font-size: 16px; font-weight: 700; }
       .receipt-order-number { font-weight: 700; }
       .thanks { margin-top: 12px; }
     `;
@@ -420,7 +424,7 @@ function scheduleSinglePagePrint(selector) {
 
     window.requestAnimationFrame(() => {
       const heightInMillimetres = Math.max(
-        40,
+        25,
         Math.ceil(receiptCopy.getBoundingClientRect().height * 25.4 / 96) + 2
       );
       const pageStyle = printDocument.createElement('style');

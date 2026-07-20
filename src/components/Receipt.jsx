@@ -1,6 +1,6 @@
 import { formatCurrency } from '../utils/money.js';
 
-export function Receipt({ order, businessName }) {
+export function Receipt({ order }) {
   if (!order) return null;
 
   const date = new Intl.DateTimeFormat('pt-PT', {
@@ -10,7 +10,7 @@ export function Receipt({ order, businessName }) {
 
   return (
     <section className="print-receipt" aria-label="Talão para impressão">
-      <h2>{businessName || 'ARCB'}</h2>
+      <h2>ARCB</h2>
       {order.number ? <p className="receipt-order-number">Pedido n.º {order.number}</p> : null}
       <hr />
       {order.items.map((item, index) => (
