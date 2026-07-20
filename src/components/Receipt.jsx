@@ -3,16 +3,8 @@ import { formatCurrency } from '../utils/money.js';
 export function Receipt({ order }) {
   if (!order) return null;
 
-  const date = new Intl.DateTimeFormat('pt-PT', {
-    dateStyle: 'short',
-    timeStyle: 'short'
-  }).format(new Date(order.createdAt));
-
   return (
     <section className="print-receipt" aria-label="Talão para impressão">
-      <h2>ARCB</h2>
-      {order.number ? <p className="receipt-order-number">Pedido n.º {order.number}</p> : null}
-      <hr />
       {order.items.map((item, index) => (
         <div className="receipt-row" key={`${item.productId || item.name}-${index}`}>
           <span>{item.quantity} x {item.name}</span>
@@ -47,8 +39,6 @@ export function Receipt({ order }) {
         </>
       ) : null}
       <p className="thanks">Obrigado pela preferência</p>
-      <hr />
-      <p>{date}</p>
     </section>
   );
 }

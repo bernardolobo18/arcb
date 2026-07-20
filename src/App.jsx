@@ -417,7 +417,6 @@ function scheduleSinglePagePrint(selector) {
       .receipt-row { display: flex; gap: 8px; justify-content: space-between; margin: 5px 0; }
       .receipt-row span:last-child { flex-shrink: 0; }
       .receipt-row.total { font-size: 16px; font-weight: 700; }
-      .receipt-order-number { font-weight: 700; }
       .thanks { margin-top: 12px; }
     `;
     printDocument.head.appendChild(receiptStyles);

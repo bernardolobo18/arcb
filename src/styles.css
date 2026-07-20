@@ -1145,10 +1145,6 @@ input[type="number"]::-webkit-outer-spin-button {
     page-break-inside: avoid;
   }
 
-  .receipt-order-number {
-    font-weight: 700;
-  }
-
   .print-receipt h2,
   .print-receipt p {
     margin: 0 0 6px;
