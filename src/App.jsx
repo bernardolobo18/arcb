@@ -215,14 +215,14 @@ export function App() {
     setLastOrder(null);
     setIsCloseOpen(false);
     setCart([]);
-    window.setTimeout(() => window.print(), 100);
+    printAsSinglePage('.close-report');
   }
 
   function printReceipt(order = lastOrder) {
     if (!order) return;
     setCloseReport(null);
     setLastOrder(order);
-    window.setTimeout(() => window.print(), 80);
+    printAsSinglePage('.print-receipt:not(.close-report)');
   }
 
   function signOut() {
@@ -375,4 +375,55 @@ function CloseReport({ report, businessName }) {
       <p>Relatorio guardado na cloud</p>
     </section>
   );
+}
+
+function printAsSinglePage(selector) {
+  window.setTimeout(() => {
+    const receipt = document.querySelector(selector);
+    if (!receipt) return;
+
+    const frame = document.createElement('iframe');
+    frame.title = 'Impressão do talão';
+    frame.style.cssText = 'border:0;height:0;position:fixed;right:0;bottom:0;width:0;';
+    document.body.appendChild(frame);
+
+    const printDocument = frame.contentDocument;
+    printDocument.open();
+    printDocument.write(`<!doctype html><html><head><meta charset="UTF-8"><title></title></head><body>${receipt.outerHTML}</body></html>`);
+    printDocument.close();
+
+    const receiptCopy = printDocument.querySelector('.print-receipt');
+    const baseStyles = printDocument.createElement('style');
+    baseStyles.textContent = `
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; width: 72mm; }
+      .print-receipt {
+        color: #000; display: block; font-family: "Courier New", monospace;
+        font-size: 12px; padding: 8px; width: 72mm;
+      }
+      h2, p { margin: 0 0 6px; text-align: center; }
+      hr { border: 0; border-top: 1px dashed #000; margin: 8px 0; }
+      .receipt-row { display: flex; gap: 8px; justify-content: space-between; margin: 5px 0; }
+      .receipt-row span:last-child { flex-shrink: 0; }
+      .receipt-row.total { font-size: 14px; font-weight: 700; }
+      .thanks { margin-top: 12px; }
+    `;
+    printDocument.head.appendChild(baseStyles);
+
+    window.requestAnimationFrame(() => {
+      const contentHeight = receiptCopy.getBoundingClientRect().height * 25.4 / 96;
+      const pageHeight = Math.max(80, Math.ceil(contentHeight) + 4);
+      const pageStyles = printDocument.createElement('style');
+      pageStyles.textContent = `@page { size: 72mm ${pageHeight}mm; margin: 0; }`;
+      printDocument.head.appendChild(pageStyles);
+
+      frame.contentWindow.addEventListener(
+        'afterprint',
+        () => window.setTimeout(() => frame.remove(), 500),
+        { once: true }
+      );
+      frame.contentWindow.focus();
+      frame.contentWindow.print();
+    });
+  }, 100);
 }

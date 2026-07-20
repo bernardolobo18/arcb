@@ -1111,10 +1111,6 @@ input[type="number"]::-webkit-outer-spin-button {
   }
 }
 
-@page {
-  size: portrait;
-}
-
 @media print {
   body * {
     visibility: hidden;
