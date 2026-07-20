@@ -996,47 +996,6 @@ input[type="number"]::-webkit-outer-spin-button {
   display: none;
 }
 
-.print-receipt.print-measurement {
-  color: #000000;
-  display: block;
-  font-family: "Courier New", monospace;
-  font-size: 12px;
-  left: -10000px;
-  padding: 4mm;
-  position: fixed;
-  top: 0;
-  visibility: hidden;
-  width: 80mm;
-}
-
-.print-receipt.print-measurement h2,
-.print-receipt.print-measurement p {
-  margin: 0 0 6px;
-  text-align: center;
-}
-
-.print-receipt.print-measurement hr {
-  border: 0;
-  border-top: 1px dashed #000000;
-  margin: 8px 0;
-}
-
-.print-receipt.print-measurement .receipt-row {
-  display: flex;
-  gap: 8px;
-  justify-content: space-between;
-  margin: 5px 0;
-}
-
-.print-receipt.print-measurement .receipt-row.total {
-  font-size: 14px;
-  font-weight: 700;
-}
-
-.print-receipt.print-measurement .thanks {
-  margin-top: 12px;
-}
-
 @media (max-width: 980px) {
   .pos-layout,
   .admin-shell {
@@ -1152,10 +1111,6 @@ input[type="number"]::-webkit-outer-spin-button {
   }
 }
 
-@page {
-  margin: 0;
-}
-
 @media print {
   html,
   body {
@@ -1181,10 +1136,10 @@ input[type="number"]::-webkit-outer-spin-button {
     font-family: "Courier New", monospace;
     font-size: 12px;
     left: 0;
-    padding: 4mm;
+    padding: 2mm;
     position: absolute;
     top: 0;
-    width: 80mm;
+    width: 72mm;
     break-inside: avoid;
     page-break-inside: avoid;
   }
