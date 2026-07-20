@@ -54,7 +54,7 @@ export function AdminPanel({ state, setState, onPrintOrder, activeSession, onSig
   function saveProduct(event) {
     event.preventDefault();
     const name = productForm.name.trim();
-    const price = Number(productForm.price);
+    const price = parseMoney(productForm.price);
     const categoryId = productForm.categoryId || state.categories[0]?.id;
     if (!name || !categoryId || Number.isNaN(price) || price < 0) return;
     setState((current) => ({ ...current, products: editingProductId
@@ -252,7 +252,7 @@ export function AdminPanel({ state, setState, onPrintOrder, activeSession, onSig
       {isProductModalOpen ? <div className="modal-backdrop"><form className="modal product-modal-form" onSubmit={saveProduct} role="dialog" aria-modal="true">
         <h2>{editingProductId ? 'Editar produto' : 'Adicionar produto'}</h2>
         <label>Nome<input value={productForm.name} onChange={(event) => setProductForm({ ...productForm, name: event.target.value })} autoFocus /></label>
-        <label>Preço<input type="number" min="0" step="0.01" value={productForm.price} onChange={(event) => setProductForm({ ...productForm, price: event.target.value })} /></label>
+        <NumericKeypad label="Preco (EUR)" value={productForm.price} onChange={(price) => setProductForm({ ...productForm, price })} decimal />
         <label>Categoria<select value={productForm.categoryId || state.categories[0]?.id || ''} onChange={(event) => setProductForm({ ...productForm, categoryId: event.target.value })}>
           {state.categories.map((category) => <option key={category.id} value={category.id}>{category.name}</option>)}</select></label>
         <div className="modal-actions"><button className="secondary-action" type="button" onClick={() => setIsProductModalOpen(false)}>Cancelar</button>

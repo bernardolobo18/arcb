@@ -12,7 +12,7 @@ export default defineConfig({
       manifest: {
         name: 'Registadora ARCB',
         short_name: 'ARCB POS',
-        description: 'Registadora privada com login e dispositivo autorizado',
+        description: 'Registadora privada com PIN de 4 digitos',
         start_url: '/',
         scope: '/',
         display: 'standalone',

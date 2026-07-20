@@ -164,7 +164,12 @@ export function App() {
     const paid = paymentMethod === 'cash' ? parseMoney(paidAmount) : pendingPaymentOrder.total;
     if (Number.isNaN(paid) || paid < pendingPaymentOrder.total) return;
 
-    const order = { ...pendingPaymentOrder, paidAmount: paid, change: paid - pendingPaymentOrder.total };
+    const order = {
+      ...pendingPaymentOrder,
+      paymentMethod,
+      paidAmount: paid,
+      change: paid - pendingPaymentOrder.total
+    };
     setState((current) => ({
       ...current,
       orders: [order, ...current.orders],
@@ -282,7 +287,7 @@ export function App() {
                 <label>Pagamento
                   <select value={paymentMethod} onChange={(event) => setPaymentMethod(event.target.value)}>
                     <option value="cash">Dinheiro</option>
-                    <option value="card">Cartao</option>
+                    <option value="card">Cartão</option>
                     <option value="mbway">MB Way</option>
                     <option value="other">Outro</option>
                   </select>
@@ -325,8 +330,8 @@ export function App() {
         {pendingReceiptOrder ? (
           <div className="modal-backdrop">
             <div className="modal" role="dialog" aria-modal="true" aria-labelledby="receipt-modal-title">
-              <h2 id="receipt-modal-title">Imprimir talao?</h2>
-              <p>O pedido foi finalizado. Deseja gerar o talao agora?</p>
+              <h2 id="receipt-modal-title">Imprimir talão?</h2>
+              <p>O pedido foi finalizado. Deseja imprimir o talão agora?</p>
               <div className="modal-actions">
                 <button className="secondary-action" onClick={() => setPendingReceiptOrder(null)}>Nao</button>
                 <button className="primary-action" onClick={() => { const order = pendingReceiptOrder; setPendingReceiptOrder(null); printReceipt(order); }}>Sim</button>
@@ -335,7 +340,7 @@ export function App() {
           </div>
         ) : null}
 
-        <Receipt order={lastOrder} />
+        <Receipt order={lastOrder} businessName={state.settings.businessName} />
         <CloseReport report={closeReport} businessName={state.settings.businessName} />
       </div>
   );

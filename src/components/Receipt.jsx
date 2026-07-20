@@ -1,6 +1,6 @@
 import { formatCurrency } from '../utils/money.js';
 
-export function Receipt({ order }) {
+export function Receipt({ order, businessName }) {
   if (!order) return null;
 
   const date = new Intl.DateTimeFormat('pt-PT', {
@@ -9,8 +9,9 @@ export function Receipt({ order }) {
   }).format(new Date(order.createdAt));
 
   return (
-    <section className="print-receipt" aria-label="Talao para impressao">
-      <h2>ARCB</h2>
+    <section className="print-receipt" aria-label="Talão para impressão">
+      <h2>{businessName || 'ARCB'}</h2>
+      {order.number ? <p className="receipt-order-number">Pedido n.º {order.number}</p> : null}
       <hr />
       {order.items.map((item, index) => (
         <div className="receipt-row" key={`${item.productId || item.name}-${index}`}>
@@ -33,7 +34,7 @@ export function Receipt({ order }) {
         <span>Pagamento</span>
         <span>{paymentLabel(order.paymentMethod)}</span>
       </div>
-      {Number.isFinite(order.paidAmount) ? (
+      {order.paymentMethod === 'cash' && Number.isFinite(order.paidAmount) ? (
         <>
           <div className="receipt-row">
             <span>Entregue</span>
@@ -55,7 +56,7 @@ export function Receipt({ order }) {
 function paymentLabel(method) {
   return {
     cash: 'Dinheiro',
-    card: 'Cartao',
+    card: 'Cartão',
     mbway: 'MB Way',
     other: 'Outro'
   }[method] || 'Dinheiro';

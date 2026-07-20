@@ -1111,7 +1111,20 @@ input[type="number"]::-webkit-outer-spin-button {
   }
 }
 
+@page {
+  margin: 0;
+}
+
 @media print {
+  html,
+  body {
+    background: #ffffff;
+    height: auto;
+    margin: 0;
+    min-height: 0;
+    padding: 0;
+  }
+
   body * {
     visibility: hidden;
   }
@@ -1127,10 +1140,14 @@ input[type="number"]::-webkit-outer-spin-button {
     font-family: "Courier New", monospace;
     font-size: 12px;
     left: 0;
-    padding: 8px;
+    padding: 4mm;
     position: absolute;
     top: 0;
     width: 72mm;
+  }
+
+  .receipt-order-number {
+    font-weight: 700;
   }
 
   .print-receipt h2,
